@@ -8,7 +8,7 @@ int main(void) {
 	 * enum defines constants SIDE, RAZORBACK, etc.
 	 * where SIDE == 0, RAZORBACK == 1, etc.
 	 */
-	typedef enum {SIDE,RAZORBACK, TROTTER, SNOUTER, JOWLER} Position;
+	typedef enum {SIDE = 0,RAZORBACK = 10, TROTTER = 10, SNOUTER = 15, JOWLER = 5} Position;
 	// define const array pig  
 	const Position pig[7] = {
 		SIDE,
@@ -56,36 +56,17 @@ int main(void) {
 			printf("%s\n", player_name[j]);
 			turn_over = 0;
 			while (!turn_over) {			// turn loop
-				printf("rolling\n");
 				roll = random() % 7;
-				switch (pig[roll]) {
-					case SIDE:
-						turn_over = 1;
-						printf("%d",roll);
-						break;
-					case JOWLER:
-						printf("%d",roll);
-						player_scores[j] += 5;
-						break;
-					case TROTTER:
-					case RAZORBACK:
-						printf("%d",roll);
-						player_scores[j] += 10;
-						break;
-					case SNOUTER:
-						printf("%d",roll);
-						player_scores[j] += 15;
-						break;
-					default:
-						printf("not valid roll\n");
-						break;
+				player_scores[j] += pig[roll];
+				printf(" rolls %d, has %d\n", pig[roll], player_scores[j]);
+				if (pig[roll] == SIDE) {
+					turn_over = 1;
 				}
-				printf("check\n");
 				if (player_scores[j] >= 100) {
-					j = num_players;
+					printf("%s won!\n", player_name[j]);
 					turn_over = 1;
 					game_over = 1;
-					printf("%s won!\n", player_name[j]);
+					j = num_players;
 				}
 			
 			}
