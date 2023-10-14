@@ -57,19 +57,23 @@ int main(void) {
 			turn_over = 0;
 			while (!turn_over) {			// turn loop
 				printf("rolling\n");
-				roll = random() % 8;
+				roll = random() % 7;
 				switch (pig[roll]) {
 					case SIDE:
 						turn_over = 1;
+						printf("%d",roll);
 						break;
 					case JOWLER:
+						printf("%d",roll);
 						player_scores[j] += 5;
 						break;
 					case TROTTER:
 					case RAZORBACK:
+						printf("%d",roll);
 						player_scores[j] += 10;
 						break;
 					case SNOUTER:
+						printf("%d",roll);
 						player_scores[j] += 15;
 						break;
 					default:
