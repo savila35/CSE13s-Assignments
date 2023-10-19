@@ -13,29 +13,30 @@ bool validate_secret(const char *secret) {
         exit(1);
     }
     while (*secret != '\0') {
-        if (97 > *secret || *secret > 122 && (*secret != 32 && *secret != 39 && *secret != 45)) {
+        if ((97 > *secret || *secret > 122) && (*secret != 32 && *secret != 39 && *secret != 45)) {
             printf("invalid character: '%c'\n", *secret);
             printf("the secret phrase must contain only lowercase letters, spaces, hyphens, and "
                    "apostrophes\n");
             exit(1);
         }
-	++secret;
+        ++secret;
     }
     return 1;
 }
 
-bool string_contains_character(const char *s, char c) {	
-	while (*s != '\0') {
-		if (c == *s) {
-			return 1;
-		}
-		++s;
-	}
-	return 0;
+bool string_contains_character(const char *s, char c) {
+    while (*s != '\0') {
+        if (c == *s) {
+            return 1;
+        }
+        ++s;
+    }
+    return 0;
 }
 
 char read_letter(void) {
-	printf("Guess a letter: ");
-	char c = getchar();
-	return c;
+    printf("Guess a letter: ");
+    int i = getchar();
+    char c = (char) i;
+    return c;
 }
