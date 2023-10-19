@@ -2,79 +2,77 @@
 #include "hangman_helpers.h"
 
 int main(int argc, char **argv) {
-    if (argc != 2) { // check for correct arguments
-        printf("wrong number of arguments\n");
-        printf("usage: %s <secret word or phrase>\n", argv[0]);
-        printf("if the secret is multiple words, you must quote it\n");
-        exit(1);
-    }
+	
+	// check for correct arguments
+	if (argc != 2) {
+		printf("wrong number of arguments\n");
+        	printf("usage: %s <secret word or phrase>\n", argv[0]);
+        	printf("if the secret is multiple words, you must quote it\n");
+        	exit(1);
+    	}
+	
+	validate_secret(argv[1]);		// validate phrase
 
-    validate_secret(argv[1]);
+	unsigned long len = strlen(argv[1]);	// length of secret phrase
+	
+	int guessed[len];			// list of bools: true if letter at index guessed
+	for (unsigned long i = 0; i < len; i++) {
+		if (string_contains_character(punctuation,argv[1][i])){
+			guessed[i] = 1;
+		} else {
+			guessed[i] = 0;
+		}
+	}
 
-    int game_over = 0;
-    int mistakes = 0;
-    int wrong_letters[26] = { 0 };
-    int index = 0;
+	int mistakes = 0;			// mistake counter
 
-    int guessed[strlen(argv[1])];
-    for (unsigned long i = 0; i < strlen(argv[1]); i++) {
-        guessed[i] = 0;
-    }
+	int eliminated[26] = {0};		// list of bools w/ len of alphabet: true if letter eliminated
+	int elim_index = 0;
 
-    while (!game_over) {
-        printf("%s", CLEAR_SCREEN);
-        printf("%s", arts[mistakes]);
-        printf("\n\nPhrase: ");
+	char guess = ' ';
+	int valid_guess = 0;
+	
+	// game loop
+	while(mistakes < LOSING_MISTAKE && !all_letters_guessed(guessed, len)){
+		
+		print_screen(mistakes, guessed, len, argv[1], eliminated);
 
-        for (unsigned long j = 0; j < strlen(argv[1]); j++) {
-            if (guessed[j] == 1 || string_contains_character(punctuation, *argv[1])) {
-                printf("%c", argv[1][j]);
-                fflush(stdout);
-            } else {
-                printf("_");
-                fflush(stdout);
-            }
-        }
+		do {
+			guess = read_letter();
+			if (!string_contains_character(argv[1],guess)){
+				elim_index = guess - 97;
+				if (eliminated[elim_index]) {
+					valid_guess = 0;
+					continue;
+				} else {
+					eliminated[elim_index] = 1;
+					mistakes++;
+					valid_guess = 1;
+				}
+			} else {
+				valid_guess = 1;
+				for (unsigned long i = 0; i < len; i++) {
+					if (guess == argv[1][i]) {
+						if (guessed[i] == 1) {
+							valid_guess = 0;
+							continue;
+						} else {
+							guessed[i] = 1;
+						}
+					}
+				}
+			}
+		} while (!valid_guess);
 
-        printf("\n");
 
-        printf("%c", *argv[1]);
-        // print eliminated letters
-        printf("Eliminated: ");
-        fflush(stdout);
-        for (int k = 0; k < 26; k++) {
-            if (wrong_letters[k]) {
-                printf("%c", k + 97);
-            }
-        }
-        printf("\n");
+	}
+	if (mistakes >= LOSING_MISTAKE){
+		print_screen(mistakes, guessed, len, argv[1], eliminated);
+		printf("You lose! The secret phrase was: %s\n", argv[1]);
+	} else {
+		print_screen(mistakes, guessed, len, argv[1], eliminated);
+		printf("You win! The secret phrase was: %s\n", argv[1]);
+	}
 
-        // this part is fucked
-        int c;
-        char guess = read_letter();
-        while (97 > guess || guess > 122) {
-            while ((c = getchar()) != '\n' && c != EOF) {
-            }
-            guess = read_letter();
-        }
-
-        // check if guess in secret phrase
-        if (!string_contains_character(argv[1], guess)) {
-            index = guess - 97;
-            wrong_letters[index] = 1;
-            ++mistakes;
-        } else {
-            for (unsigned long t = 0; t < strlen(argv[1]); t++) {
-                if (guess == argv[1][t]) {
-                    printf("correct\n");
-                    guessed[t] = 1;
-                }
-                printf("%c, %c, %d\n", guess, argv[1][t], guessed[t]);
-            }
-        }
-        // if all guessed == 1 then winner
-        // else if mistakes == losing mistake? then loser
-    }
-
-    return 0;
+	return 0;
 }

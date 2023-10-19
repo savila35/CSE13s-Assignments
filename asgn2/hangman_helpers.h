@@ -23,6 +23,10 @@ bool validate_secret(const char *secret);
 
 bool is_lowercase_letter(char c);
 
+bool all_letters_guessed(int guessed[], unsigned long len);
+
+void print_screen(int mistakes, int guessed[], unsigned long len, const char *secret, int eliminated[]);
+
 static const char *punctuation = " '-";
 
 static const char *arts[] = { "  _____\n"

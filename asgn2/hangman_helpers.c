@@ -35,8 +35,45 @@ bool string_contains_character(const char *s, char c) {
 }
 
 char read_letter(void) {
-    printf("Guess a letter: ");
-    int i = getchar();
-    char c = (char) i;
+        char c = ' ';
+        do {
+                if (c != '\n') {
+                        printf("Guess a letter: ");
+                }
+                c = (char) getchar();
+        } while (97 > c || c > 122);
     return c;
+}
+
+bool all_letters_guessed(int guessed[], unsigned long len){
+	int all_guessed = 1;
+	for (unsigned long i = 0; i < len; i++){
+		if (!guessed[i]) {
+			all_guessed = 0;	
+			return all_guessed;
+		}
+	}
+	return all_guessed;
+}
+
+void print_screen(int mistakes, int guessed[], unsigned long len, const char *secret, int eliminated[]) {
+	printf("%s", CLEAR_SCREEN);
+	printf("%s\n\n",arts[mistakes]);
+	printf("    Phrase: ");             // print phrase
+        for (unsigned long i = 0; i < len; i++) {
+		if (guessed[i]) {
+			printf("%c",*secret);
+		} else {
+			printf("_");
+		}
+		++secret;
+	}
+	printf("\n");
+	printf("Eliminated: ");
+	for (int i = 0; i < 26; i++) {
+		if (eliminated[i] == 1) {
+			printf("%c", i + 97);
+		}
+	}
+	printf("\n\n");
 }
