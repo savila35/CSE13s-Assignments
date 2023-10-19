@@ -12,9 +12,9 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
-   if (!validate_secret(argv[1])){
-	   return 0;
-   }
+    if (!validate_secret(argv[1])) {
+        return 0;
+    }
 
     unsigned long len = strlen(argv[1]); // length of secret phrase
 
@@ -41,7 +41,13 @@ int main(int argc, char **argv) {
         print_screen(mistakes, guessed, len, argv[1], eliminated);
 
         do {
-            guess = read_letter();
+            do {
+                if (guess != '\n') {
+                    printf("Guess a letter: ");
+                }
+                guess = read_letter();
+            } while (!is_lowercase_letter(guess));
+
             if (!string_contains_character(argv[1], guess)) {
                 elim_index = guess - 97;
                 if (eliminated[elim_index]) {

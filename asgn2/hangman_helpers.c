@@ -10,14 +10,14 @@ bool is_lowercase_letter(char c) {
 bool validate_secret(const char *secret) {
     if (strlen(secret) > MAX_LENGTH) {
         printf("the secret phrase is over 256 characters");
-	return 0;
+        return 0;
     }
     while (*secret != '\0') {
         if ((97 > *secret || *secret > 122) && (*secret != 32 && *secret != 39 && *secret != 45)) {
             printf("invalid character: '%c'\n", *secret);
             printf("the secret phrase must contain only lowercase letters, spaces, hyphens, and "
                    "apostrophes\n");
-	    return 0;
+            return 0;
         }
         ++secret;
     }
@@ -35,13 +35,7 @@ bool string_contains_character(const char *s, char c) {
 }
 
 char read_letter(void) {
-    char c = ' ';
-    do {
-        if (c != '\n') {
-            printf("Guess a letter: ");
-        }
-        c = (char) getchar();
-    } while (!is_lowercase_letter(c));
+    int c = getchar();
     return (char) c;
 }
 
