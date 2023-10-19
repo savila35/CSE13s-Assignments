@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
     }
 
     if (!validate_secret(argv[1])) {
-        return 0;
+        return 1;
     }
 
     unsigned long len = strlen(argv[1]); // length of secret phrase
