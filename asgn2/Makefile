@@ -1,6 +1,6 @@
 CC = clang
-CFLAGS = -g3 -Werror -Wall -Wextra -Wconversion -Wdouble-promotion -Wstrict-prototypes -pedantic -fsanitize=undefined,address -fsanitize-trap
-LFLAGS = -fsanitize=undefined,address
+CFLAGS = -g3 -Werror -Wall -Wextra -Wconversion -Wdouble-promotion -Wstrict-prototypes -pedantic  
+
 EXEC = hangman
 HEADERS = hangman_helpers.h
 
