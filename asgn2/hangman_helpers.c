@@ -35,8 +35,15 @@ bool string_contains_character(const char *s, char c) {
 }
 
 char read_letter(void) {
-    int c = getchar();
-    return (char) c;
+    char c = ' ';
+    do {
+        c = (char) getchar();
+        if (c == '\n') {
+            continue;
+        } else {
+            return c;
+        }
+    } while (1);
 }
 
 bool all_letters_guessed(int guessed[], unsigned long len) {

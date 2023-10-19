@@ -42,9 +42,7 @@ int main(int argc, char **argv) {
 
         do {
             do {
-                if (guess != '\n') {
-                    printf("Guess a letter: ");
-                }
+                printf("Guess a letter: ");
                 guess = read_letter();
             } while (!is_lowercase_letter(guess));
 
