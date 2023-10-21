@@ -9,11 +9,11 @@ bool is_lowercase_letter(char c) {
 
 bool validate_secret(const char *secret) {
     if (strlen(secret) > MAX_LENGTH) {
-        printf("the secret phrase is over 256 characters");
+        printf("the secret phrase is over 256 characters\n");
         return 0;
     }
     while (*secret != '\0') {
-        if ((97 > *secret || *secret > 122) && (*secret != 32 && *secret != 39 && *secret != 45)) {
+        if ((!is_lowercase_letter(*secret)) && (!string_contains_character(punctuation, *secret))) {
             printf("invalid character: '%c'\n", *secret);
             printf("the secret phrase must contain only lowercase letters, spaces, hyphens, and "
                    "apostrophes\n");
@@ -47,14 +47,12 @@ char read_letter(void) {
 }
 
 bool all_letters_guessed(int guessed[], unsigned long len) {
-    int all_guessed = 1;
     for (unsigned long i = 0; i < len; i++) {
         if (!guessed[i]) {
-            all_guessed = 0;
-            return all_guessed;
+            return 0;
         }
     }
-    return all_guessed;
+    return 1;
 }
 
 void print_screen(
