@@ -7,13 +7,16 @@
 
 bool apply_binary_operator(binary_operator_fn op) {
 	if (stack_size < 2) {
-		return 0;
+		return false;
 	}
+
 	double arg1 = 0.0;
 	double arg2 = 0.0;
-	stack_pop(&arg1);
-	stack_pop(&arg2);
-	return 1;
+	assert(stack_pop(&arg1));
+	assert(stack_pop(&arg2));
+	double res = op(arg1,arg2);
+	assert(stack_push(res));
+	return true;
 }
 
 
