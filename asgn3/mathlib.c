@@ -30,6 +30,11 @@ double Sqrt(double x) {
 }
 
 double Sin(double x) {
+	x = fmod(x, 2 * M_PI);
+	if (x < 0) {
+		x += (2 * M_PI);
+	}
+
 	double res = 0.0;
 	int sign = 1;
 	double term = x;
@@ -52,6 +57,11 @@ double Sin(double x) {
 }
 
 double Cos(double x) {
+	x = fmod(x, 2 * M_PI);
+	if (x < 0) {
+		x += (2 * M_PI);
+	}
+
 	double res = 0.0;
 	int sign = 1;
 	double term = 1;
