@@ -2,7 +2,7 @@ CC = clang
 BASICS = -Werror -Wall -Wextra -Wconversion -Wdouble-promotion -Wstrict-prototypes -pedantic
 LFLAGS = -lm
 EXEC = calc
-HEADERS = mathlib.h stack.h operators.h
+HEADERS = mathlib.h stack.h operators.h messages.h
 OBJS = mathlib.o stack.o operators.o
 TESTS = test
 
@@ -13,7 +13,7 @@ all: $(EXEC) $(TESTS)
 debug: $(EXEC)
 
 $(EXEC): $(EXEC).o $(OBJS)
-	$(CC) $^ $(CFLAGS) -o $@
+	$(CC) $^ $(LFLAGS) -o $@
 
 $(TESTS): $(TESTS).o $(OBJS)
 	$(CC) $^ $(LFLAGS) -o $@
@@ -28,4 +28,7 @@ clean:
 format: 
 	clang-format -i -style=file *.[ch]
 
-.PHONY: all clean format
+scan-build: clean
+	scan-build --use-cc=clang make
+
+.PHONY: all clean format scan-build debug
