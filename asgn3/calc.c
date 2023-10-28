@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <unistd.h>
+#include <assert.h>
 
 #include "messages.h"
 #include "stack.h"
@@ -27,7 +28,7 @@ int main(int argc, char **argv) {
 				return 1;
 		}
 	}
-
+	assert(apply_unary_operator(unary_operators['s']) == false);
 	
 
 	return 0;
