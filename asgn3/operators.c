@@ -11,8 +11,8 @@ bool apply_binary_operator(binary_operator_fn op) {
         return false;
     }
 
-    double arg1 = 0.0;
-    double arg2 = 0.0;
+    double arg1;
+    double arg2;
     assert(stack_pop(&arg1));
     assert(stack_pop(&arg2));
     double res = op(arg1, arg2);
