@@ -4,13 +4,14 @@ LFLAGS = -lm
 EXEC = calc
 HEADERS = mathlib.h stack.h operators.h messages.h
 OBJS = mathlib.o stack.o operators.o
-TESTS = test
+TESTS = tests
 
 debug: CFLAGS = $(BASICS) -gdwarf-4
 all: CFLAGS = $(BASICS)
 
 all: $(EXEC) $(TESTS)
 debug: $(EXEC)
+tests: $(TESTS)
 
 $(EXEC): $(EXEC).o $(OBJS)
 	$(CC) $^ $(LFLAGS) -o $@
