@@ -5,18 +5,23 @@ EXEC = calc
 HEADERS = mathlib.h stack.h operators.h messages.h
 OBJS = mathlib.o stack.o operators.o
 TESTS = tests
+GRAPHS = graphs
 
 debug: CFLAGS = $(BASICS) -gdwarf-4
 all: CFLAGS = $(BASICS)
+tests: CFLAGS = $(BASICS)
+graphs: CFLAGS = $(BASICS)
 
-all: $(EXEC) $(TESTS)
+all: $(EXEC) $(TESTS) $(GRAPHS)
 debug: $(EXEC)
-tests: $(TESTS)
 
 $(EXEC): $(EXEC).o $(OBJS)
 	$(CC) $^ $(LFLAGS) -o $@
 
 $(TESTS): $(TESTS).o $(OBJS)
+	$(CC) $^ $(LFLAGS) -o $@
+
+$(GRAPHS): $(GRAPHS).o $(OBJS)
 	$(CC) $^ $(LFLAGS) -o $@
 
 %.o: %.c $(HEADERS)
@@ -25,6 +30,8 @@ $(TESTS): $(TESTS).o $(OBJS)
 clean:
 	rm -rf $(EXEC) *.o
 	rm -rf $(TESTS) *.o
+	rm -rf $(GRAPHS) *.o
+	rm -rf $(GRAPHS) *.csv
 
 format: 
 	clang-format -i -style=file *.[ch]
@@ -32,4 +39,4 @@ format:
 scan-build: clean
 	scan-build --use-cc=clang make
 
-.PHONY: all clean format scan-build debug
+.PHONY: all clean format scan-build tests graphs
