@@ -6,6 +6,7 @@
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 
 #define OPTIONS "hm"
@@ -25,6 +26,29 @@ int main(int argc, char **argv) {
         }
     }
     assert(apply_unary_operator(unary_operators['s']) == false);
+
+    int loop = 0;
+    while (1) { //input loop
+        double x = 0;
+        char input_line[STACK_CAPACITY];
+        char *saveptr;
+        //bool error = false;
+        fgets(input_line, STACK_CAPACITY, stdin);
+        const char *token = strtok_r(input_line, " ", &saveptr);
+        while (token != NULL) {
+            printf("here");
+            if (parse_double(token, &x)) {
+                printf("%f", x);
+            }
+
+            token = strtok_r(NULL, " ", &saveptr);
+        }
+        x++;
+        if (loop == 1) {
+            return 0;
+        }
+        loop++;
+    }
 
     return 0;
 }
