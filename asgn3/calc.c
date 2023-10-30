@@ -52,6 +52,7 @@ int main(int argc, char **argv) {
                 }
             } else if (strlen(token) > 1) {
                 fprintf(stderr, ERROR_BAD_STRING, token);
+                stack_clear();
                 error = true;
             } else if (binary_operators[(unsigned) *token] != 0
                        && binary_operators[(unsigned) *token] != NULL) {
