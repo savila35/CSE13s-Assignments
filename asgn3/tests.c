@@ -39,6 +39,11 @@ int main(void) {
     assert(apply_binary_operator(operator_mul) == false);
     assert(apply_binary_operator(operator_div) == false);
 
+    assert(apply_unary_operator(my_unary_operators['s']) == false);
+    assert(apply_unary_operator(my_unary_operators['c']) == false);
+    assert(apply_unary_operator(my_unary_operators['t']) == false);
+    assert(apply_unary_operator(my_unary_operators['r']) == false);
+
     // testing mathlib
 
     assert(Abs(-10) == 10);
@@ -50,4 +55,6 @@ int main(void) {
     assert(Abs(Cos(2) - cos(2)) < EPSILON);
     assert(Abs(Sin(-3 * M_PI) - sin(-3 * M_PI)) < EPSILON);
     assert(Abs(Tan(5 * M_PI) - tan(5 * M_PI)) < EPSILON);
+
+    assert(Sqrt(16) == 4);
 }
