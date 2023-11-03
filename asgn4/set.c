@@ -19,7 +19,7 @@ Set set_insert(Set s, int x) {
 }
 
 Set set_remove(Set s, int x) {
-	s = s && set_complement(0x01 << x);
+	s = s & set_complement(0x01 << x);
 	return s;
 }
 

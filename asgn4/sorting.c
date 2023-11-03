@@ -28,6 +28,16 @@
 	"   -r seed         Specify random seed (default: 13371453).\n"				\
 	
 int main(int argc,char **argv) {
+	Set set = 0x00;
+	int heap = 0x01;
+	int batcher = 0x02;
+	int shell = 0x04;
+	int quick = 0x08;
+	int insert = 0x10;
+	int elements = 100;
+	int seed  = 13371453;
+	int size = 100;
+
 	int opt;
 	while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
 		switch (opt) {
@@ -36,20 +46,27 @@ int main(int argc,char **argv) {
 				return 0;
 				break;
 			case "a":
+				set = set_univeral();
 				break;
 			case "h":
+				set = set_insert(set, heap);
 				break;
 			case "b":
+				set = set_instert(set, batcher);
 				break;
 			case "s":
+				set = set_insert(set, shell);
 				break;
 			case "q":
+				set = set_insert(set, quick);
 				break;
 			case "i":
+				set = set_insert(set, insert);
 				break;
 			case "n":
 				break;
 			case "p":
+				break;
 			case "r":
 				break;
 			default:
