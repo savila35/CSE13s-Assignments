@@ -24,19 +24,19 @@ Set set_remove(Set s, int x) {
 }
 
 bool set_member(Set s, int x) {
-	if (s && (0x01 << x)) {
+	if (s & (0x01 << x)) {
 		return true;
 	}
 	return false;
 }
 
 Set set_intersect(Set s, Set t) {
-	s = s && t;
+	s = s & t;
 	return s;
 }
 
 Set set_difference(Set s, Set t) {
-	s = s && set_complement(t);
+	s = s & set_complement(t);
 	return s;
 }
 
