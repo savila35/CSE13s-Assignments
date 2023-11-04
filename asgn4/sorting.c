@@ -1,5 +1,4 @@
 #include "sorting.h"
-
 #include "batcher.h"
 #include "heap.h"
 #include "insert.h"
@@ -11,6 +10,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 #define OPTIONS "Hahbsqin:p:r:"
 
@@ -18,7 +18,7 @@
     "SYNOPSIS\n"                                                                                   \
     "   A collection of comparison-base sorting algorithms.\n\n"                                   \
     "USAGE\n"                                                                                      \
-    "   ./%s [-Hahbsqi] [-n length] [-p elements] [-r seed]\n\n"                                   \
+    "   %s [-Hahbsqi] [-n length] [-p elements] [-r seed]\n\n"                                   \
     "OPTIONS\n"                                                                                    \
     "   -H              Display program help and usage.\n"                                         \
     "   -a              Enable all sorts.\n"                                                       \
@@ -92,6 +92,21 @@ void comparator(Stats *stats, int *A, int x, int y) {
     }
 }
 
+// sorting helpers
+void print_elements(int *A, int size, int elements) {
+	int j = elements;
+	if (size < elements) { 
+		j = size;
+       	}
+	for (int i = 0; i < j; i++) {
+		printf("%13d", A[i]);
+		if ((i + 1) % 5 == 0) {
+			printf("\n");
+		}
+	}
+}
+
+
 int main(int argc, char **argv) {
     Set set = 0x00;
     int heap = 0x01;
@@ -110,20 +125,43 @@ int main(int argc, char **argv) {
             printf(USAGE, argv[0]);
             return 0;
             break;
-        case 'a': set = set_universal(); break;
-        case 'h': set = set_insert(set, heap); break;
-        case 'b': set = set_insert(set, batcher); break;
-        case 's': set = set_insert(set, shell); break;
-        case 'q': set = set_insert(set, quick); break;
-        case 'i': set = set_insert(set, insert); break;
-        case 'n': break;
-        case 'p': break;
-        case 'r': break;
+        case 'a': 
+	    set = set_universal(); 
+	    break;
+        case 'h': 
+	    set = set_insert(set, heap); 
+	    break;
+        case 'b': 
+	    set = set_insert(set, batcher); 
+	    break;
+        case 's': 
+	    set = set_insert(set, shell); 
+	    break;
+        case 'q': 
+	    set = set_insert(set, quick); 
+	    break;
+        case 'i': 
+	    set = set_insert(set, insert); 
+	    break;
+        case 'n': 
+	    size = (int) strtoull(optarg, NULL, 10);
+	    break;
+        case 'p': 
+	    elements = (int) strtoull(optarg, NULL, 10);
+	    break;
+        case 'r': 
+	    seed = (int) strtoull(optarg, NULL, 10);
+	    break;
         default: fprintf(stderr, USAGE, argv[0]); return 1;
         }
     }
-    (void) seed;
-    (void) elements;
-    (void) size;
+    
+    if (set == 0x00) {
+	    fprintf(stderr, "Select at least one sort to perform.\n");
+	    fprintf(stderr, USAGE, argv[0]);
+	    return 1;
+    }
+
+    printf("size: %d\nelements: %d\nseed: %d\n", size, elements, seed);
     return 0;
 }
