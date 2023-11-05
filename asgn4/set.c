@@ -44,3 +44,8 @@ Set set_complement(Set s) {
     s = ~s;
     return s;
 }
+
+Set set_union(Set s, Set t) {
+	s = s & t;
+	return s;
+}
