@@ -149,10 +149,7 @@ int main(int argc, char **argv) {
         case 'b': set = set_insert(set, batcher); break;
         case 's': set = set_insert(set, shell); break;
         case 'q': set = set_insert(set, quick); break;
-        case 'i':
-            set = set_insert(set, insert);
-            printf("%x\n", set);
-            break;
+        case 'i': set = set_insert(set, insert); break;
         case 'n': size = (int) strtoull(optarg, NULL, 10); break;
         case 'p': elements = (int) strtoull(optarg, NULL, 10); break;
         case 'r': seed = (int) strtoull(optarg, NULL, 10); break;
