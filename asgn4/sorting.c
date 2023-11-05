@@ -1,4 +1,5 @@
 #include "sorting.h"
+
 #include "batcher.h"
 #include "heap.h"
 #include "insert.h"
@@ -9,8 +10,8 @@
 
 #include <stdbool.h>
 #include <stdio.h>
-#include <unistd.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #define OPTIONS "Hahbsqin:p:r:"
 
@@ -18,7 +19,7 @@
     "SYNOPSIS\n"                                                                                   \
     "   A collection of comparison-base sorting algorithms.\n\n"                                   \
     "USAGE\n"                                                                                      \
-    "   %s [-Hahbsqi] [-n length] [-p elements] [-r seed]\n\n"                                   \
+    "   %s [-Hahbsqi] [-n length] [-p elements] [-r seed]\n\n"                                     \
     "OPTIONS\n"                                                                                    \
     "   -H              Display program help and usage.\n"                                         \
     "   -a              Enable all sorts.\n"                                                       \
@@ -35,7 +36,7 @@
 int max_child(Stats *stats, int *A, int first, int last) {
     int left = 2 * first + 1;
     int right = 2 * first + 2;
-    if (right <= last && cmp(stats, A[left], A[right]) == -1) {
+    if (right <= last && cmp(stats, A[left], A[right]) < 0) {
         return right;
     }
     return left;
@@ -46,7 +47,7 @@ void fix_heap(Stats *stats, int *A, int first, int last) {
     int parent = first;
     while ((2 * parent + 1) <= last && !done) {
         int largest_child = max_child(stats, A, parent, last);
-        if (cmp(stats, A[parent], A[largest_child]) == -1) {
+        if (cmp(stats, A[parent], A[largest_child]) < 0) {
             swap(stats, &A[parent], &A[largest_child]);
             parent = largest_child;
         } else {
@@ -67,9 +68,9 @@ void build_heap(Stats *stats, int *A, int first, int last) {
 int partition(Stats *stats, int *A, int lo, int hi) {
     int i = lo - 1;
     for (int j = lo; j < hi; j++) {
-        if (cmp(stats, A[j], A[hi]) == -1) {
+        if (cmp(stats, A[j], A[hi]) < 0) {
             i++;
-            swap(stats, &A[j], &A[hi]);
+            swap(stats, &A[j], &A[i]);
         }
     }
     i++;
@@ -92,28 +93,46 @@ void comparator(Stats *stats, int *A, int x, int y) {
     }
 }
 
-// sorting helpers
-void print_elements(int *A, int size, int elements) {
-	int j = elements;
-	if (size < elements) { 
-		j = size;
-       	}
-	for (int i = 0; i < j; i++) {
-		printf("%13d", A[i]);
-		if ((i + 1) % 5 == 0) {
-			printf("\n");
-		}
-	}
+int bit_length(int n) {
+    int l = 0;
+    while (n > 0) {
+        n = n >> 1;
+        l++;
+    }
+    return l;
 }
 
+// sorting helpers
+void print_elements(int *A, int size, int elements) {
+    int j = elements;
+    if (size < elements) {
+        j = size;
+    }
+    for (int i = 0; i < j; i++) {
+        printf("%13d", A[i]);
+        if ((i + 1) % 5 == 0) {
+            printf("\n");
+        }
+        if ((i + 1) % 5 != 0 && i + 1 >= j) {
+            printf("\n");
+        }
+    }
+}
+
+void make_array(int *A, int seed, int size, int mask) {
+    srandom(seed);
+    for (int i = 0; i < size; i++) {
+        A[i] = random() & mask;
+    }
+}
 
 int main(int argc, char **argv) {
-    Set set = 0x00;
-    int heap = 0x01;
-    int batcher = 0x02;
-    int shell = 0x04;
-    int quick = 0x08;
-    int insert = 0x10;
+    Set set = set_empty();
+    int heap = 0;
+    int batcher = 1;
+    int shell = 2;
+    int quick = 3;
+    int insert = 4;
     int elements = 100;
     int seed = 13371453;
     int size = 100;
@@ -125,43 +144,70 @@ int main(int argc, char **argv) {
             printf(USAGE, argv[0]);
             return 0;
             break;
-        case 'a': 
-	    set = set_universal(); 
-	    break;
-        case 'h': 
-	    set = set_insert(set, heap); 
-	    break;
-        case 'b': 
-	    set = set_insert(set, batcher); 
-	    break;
-        case 's': 
-	    set = set_insert(set, shell); 
-	    break;
-        case 'q': 
-	    set = set_insert(set, quick); 
-	    break;
-        case 'i': 
-	    set = set_insert(set, insert); 
-	    break;
-        case 'n': 
-	    size = (int) strtoull(optarg, NULL, 10);
-	    break;
-        case 'p': 
-	    elements = (int) strtoull(optarg, NULL, 10);
-	    break;
-        case 'r': 
-	    seed = (int) strtoull(optarg, NULL, 10);
-	    break;
+        case 'a': set = set_universal(); break;
+        case 'h': set = set_insert(set, heap); break;
+        case 'b': set = set_insert(set, batcher); break;
+        case 's': set = set_insert(set, shell); break;
+        case 'q': set = set_insert(set, quick); break;
+        case 'i':
+            set = set_insert(set, insert);
+            printf("%x\n", set);
+            break;
+        case 'n': size = (int) strtoull(optarg, NULL, 10); break;
+        case 'p': elements = (int) strtoull(optarg, NULL, 10); break;
+        case 'r': seed = (int) strtoull(optarg, NULL, 10); break;
         default: fprintf(stderr, USAGE, argv[0]); return 1;
         }
     }
-    
+
     if (set == 0x00) {
-	    fprintf(stderr, "Select at least one sort to perform.\n");
-	    fprintf(stderr, USAGE, argv[0]);
-	    return 1;
+        fprintf(stderr, "Select at least one sort to perform.\n");
+        fprintf(stderr, USAGE, argv[0]);
+        return 1;
     }
 
-    printf("size: %d\nelements: %d\nseed: %d\n", size, elements, seed);
+    Stats stats;
+    int mask = 0x03fffffff;
+    srandom(seed);
+    int *A = malloc(size * sizeof(mask));
+
+    if (set_member(set, insert)) {
+        reset(&stats);
+        make_array(A, seed, size, mask);
+        insertion_sort(&stats, A, size);
+        print_stats(&stats, "Insertion Sort", size);
+        print_elements(A, size, elements);
+    }
+    if (set_member(set, heap)) {
+        reset(&stats);
+        make_array(A, seed, size, mask);
+        heap_sort(&stats, A, size);
+        print_stats(&stats, "Heap Sort", size);
+        print_elements(A, size, elements);
+    }
+    if (set_member(set, shell)) {
+        reset(&stats);
+        make_array(A, seed, size, mask);
+        shell_sort(&stats, A, size);
+        print_stats(&stats, "Shell Sort", size);
+        print_elements(A, size, elements);
+    }
+    if (set_member(set, quick)) {
+        reset(&stats);
+        make_array(A, seed, size, mask);
+        quick_sort(&stats, A, size);
+        print_stats(&stats, "Quick Sort", size);
+        print_elements(A, size, elements);
+    }
+    if (set_member(set, batcher)) {
+        reset(&stats);
+        make_array(A, seed, size, mask);
+        batcher_sort(&stats, A, size);
+        print_stats(&stats, "Batcher Sort", size);
+        print_elements(A, size, elements);
+    }
+
+    free(A);
+
     return 0;
 }

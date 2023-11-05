@@ -9,8 +9,8 @@
 #include <inttypes.h>
 
 typedef struct {
-  uint64_t moves;
-  uint64_t compares;
+    uint64_t moves;
+    uint64_t compares;
 } Stats;
 
 int cmp(Stats *stats, int x, int y);

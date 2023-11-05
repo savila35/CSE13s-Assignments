@@ -36,38 +36,40 @@
 *       print_stats(&stats, algorithm_name, num_elements);
 */
 
-#include <stdio.h>
 #include "stats.h"
 
+#include <stdio.h>
+
 int cmp(Stats *stats, int x, int y) {
-  stats->compares += 1;
-  if (x < y) {
-    return -1;
-  } else if (x > y) {
-    return 1;
-  } else {
-    return 0;
-  }
+    stats->compares += 1;
+    if (x < y) {
+        return -1;
+    } else if (x > y) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 int move(Stats *stats, int x) {
-  stats->moves += 1;
-  return x;
+    stats->moves += 1;
+    return x;
 }
 
 void swap(Stats *stats, int *x, int *y) {
-  stats->moves += 3;
-  int t = *x;
-  *x = *y;
-  *y = t;
+    stats->moves += 3;
+    int t = *x;
+    *x = *y;
+    *y = t;
 }
 
-void reset(Stats *stats) { stats->moves = stats->compares = 0; }
+void reset(Stats *stats) {
+    stats->moves = stats->compares = 0;
+}
 
 void print_stats(Stats *stats, const char *algorithm_name, int num_elements) {
-  printf("%s, %" PRIu32 " elements, "
-         "%" PRIu64 " moves, "
-         "%" PRIu64 " compares\n",
-         algorithm_name, num_elements, stats->moves, stats->compares);
+    printf("%s, %" PRIu32 " elements, "
+           "%" PRIu64 " moves, "
+           "%" PRIu64 " compares\n",
+        algorithm_name, num_elements, stats->moves, stats->compares);
 }
-
