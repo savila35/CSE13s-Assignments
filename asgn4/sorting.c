@@ -78,12 +78,12 @@ int main(int argc, char **argv) {
         case 's': set = set_insert(set, shell); break;
         case 'q': set = set_insert(set, quick); break;
         case 'i': set = set_insert(set, insert); break;
-        case 'n': 
-		  size = (int) strtoull(optarg, NULL, 10); 
-		  if (size < 0) {
-			  size = 100;
-		  }
-		  break;
+        case 'n':
+            size = (int) strtoull(optarg, NULL, 10);
+            if (size < 0) {
+                size = 100;
+            }
+            break;
         case 'p': elements = (int) strtoull(optarg, NULL, 10); break;
         case 'r': seed = (int) strtoull(optarg, NULL, 10); break;
         default: fprintf(stderr, USAGE, argv[0]); return 1;
