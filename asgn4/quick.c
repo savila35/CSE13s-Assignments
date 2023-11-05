@@ -1,7 +1,5 @@
 #include "quick.h"
 
-#include "sorting.h"
-
 #include <stdio.h>
 
 int partition(Stats *stats, int *A, int lo, int hi) {
@@ -24,7 +22,6 @@ void quick_sorter(Stats *stats, int *A, int lo, int hi) {
         quick_sorter(stats, A, p + 1, hi);
     }
 }
-
 
 void quick_sort(Stats *stats, int *A, int n) {
     quick_sorter(stats, A, 0, n - 1);

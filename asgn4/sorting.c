@@ -1,5 +1,3 @@
-#include "sorting.h"
-
 #include "batcher.h"
 #include "heap.h"
 #include "insert.h"

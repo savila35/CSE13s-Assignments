@@ -1,7 +1,5 @@
 #include "batcher.h"
 
-#include "sorting.h"
-
 #include <stdio.h>
 
 void comparator(Stats *stats, int *A, int x, int y) {
@@ -18,7 +16,6 @@ int bit_length(int n) {
     }
     return l;
 }
-
 
 void batcher_sort(Stats *stats, int *A, int n) {
     if (n == 0) {
