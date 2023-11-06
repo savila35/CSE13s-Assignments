@@ -9,7 +9,7 @@ void insertion_sort(Stats *stats, int *arr, int length) {
         int j = i;
         int temp = move(stats, arr[i]);
 
-        while (j > 0 && cmp(stats, temp, arr[j - 1]) == -1) {
+        while (j > 0 && cmp(stats, temp, arr[j - 1]) < 0) {
             arr[j] = move(stats, arr[j - 1]);
             j--;
         }

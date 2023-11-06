@@ -15,7 +15,7 @@
 
 #define USAGE                                                                                      \
     "SYNOPSIS\n"                                                                                   \
-    "   A collection of comparison-base sorting algorithms.\n\n"                                   \
+    "   A collection of comparison-based sorting algorithms.\n\n"                                   \
     "USAGE\n"                                                                                      \
     "   %s [-Hahbsqi] [-n length] [-p elements] [-r seed]\n\n"                                     \
     "OPTIONS\n"                                                                                    \
@@ -40,8 +40,7 @@ void print_elements(int *A, int size, int elements) {
         printf("%13d", A[i]);
         if ((i + 1) % 5 == 0) {
             printf("\n");
-        }
-        if ((i + 1) % 5 != 0 && i + 1 >= j) {
+        } else if (i + 1 >= j) {
             printf("\n");
         }
     }

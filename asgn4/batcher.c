@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 void comparator(Stats *stats, int *A, int x, int y) {
-    if (cmp(stats, A[y], A[x]) == -1) {
+    if (cmp(stats, A[y], A[x]) < 0) {
         swap(stats, &A[x], &A[y]);
     }
 }
@@ -13,6 +13,9 @@ int bit_length(int n) {
     while (n > 0) {
         n = n >> 1;
         l++;
+    }
+    if (l == 0) {
+	    return 1;
     }
     return l;
 }
