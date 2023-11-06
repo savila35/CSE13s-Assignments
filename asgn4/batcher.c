@@ -15,7 +15,7 @@ int bit_length(int n) {
         l++;
     }
     if (l == 0) {
-	    return 1;
+        return 1;
     }
     return l;
 }

@@ -15,7 +15,7 @@
 
 #define USAGE                                                                                      \
     "SYNOPSIS\n"                                                                                   \
-    "   A collection of comparison-based sorting algorithms.\n\n"                                   \
+    "   A collection of comparison-based sorting algorithms.\n\n"                                  \
     "USAGE\n"                                                                                      \
     "   %s [-Hahbsqi] [-n length] [-p elements] [-r seed]\n\n"                                     \
     "OPTIONS\n"                                                                                    \
