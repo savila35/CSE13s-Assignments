@@ -1,3 +1,4 @@
+#include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <inttypes.h>
@@ -83,8 +84,9 @@ uint32_t stack_size(const Stack *s) {
 void stack_copy(Stack *dst, const Stack *src) {
 	assert(dst->capacity <= src->capacity);
 
-	dst->items = src->items;
 	dst->top = src->top;
+	memcpy(dst->items, src->items, dst->capacity * sizeof(uint32_t));
+
 }
 
 void stack_print(const Stack *s, FILE *outfile, char *cities[]) {
