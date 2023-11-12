@@ -70,8 +70,16 @@ void path_copy(Path *dst, const Path *src) {
 void path_print(const Path *p, FILE *f, const Graph *g) {
     char **names = graph_get_names(g);
     uint32_t v;
+    uint32_t l = stack_size(p->vertices);
+    uint32_t *reverse = calloc(l, sizeof(uint32_t));
+    int i = l - 1;
     while (stack_size(p->vertices) > 0) {
         stack_pop(p->vertices, &v);
-        fprintf(f, "%s\n", names[v]);
+        reverse[i] = v;
+        i--;
     }
+    for (uint32_t j = 0; j < l; j++) {
+        fprintf(f, "%s\n", names[reverse[j]]);
+    }
+    free(reverse);
 }

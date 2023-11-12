@@ -1,9 +1,11 @@
 #include "graph.h"
 #include "path.h"
 #include "stack.h"
+#include "vertices.h"
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #define OPTIONS "hdi:o:"
@@ -20,6 +22,33 @@
     "             graph and the command-line options it accepts, exiting the\n"                    \
     "             program afterwards.\n"
 
+void dfs(Graph *g, Path *curr_path, Path *short_path, uint32_t short_distance) {
+    uint32_t curr_vertex = path_remove(curr_path, g);
+    path_add(curr_path, curr_vertex, g);
+    graph_visit_vertex(g, curr_vertex);
+    if (path_vertices(curr_path) == graph_vertices(g)) {
+        if (graph_get_weight(g, curr_vertex, START_VERTEX) == 0) {
+            return;
+        }
+        if (path_distance(curr_path) < short_distance) {
+            path_copy(short_path, curr_path);
+            short_distance = path_distance(curr_path);
+            return;
+        }
+    }
+
+    for (uint32_t i = 0; i < graph_vertices(g); i++) {
+        if (!graph_visited(g, i) && graph_get_weight(g, curr_vertex, i) != 0) {
+            //printf("weight[%d][%d}: %d\n", curr_vertex, i, graph_get_weight(g, curr_vertex, i));
+            graph_visit_vertex(g, i);
+            path_add(curr_path, i, g);
+            dfs(g, curr_path, short_path, short_distance);
+        }
+    }
+    path_remove(curr_path, g);
+    graph_unvisit_vertex(g, curr_vertex);
+}
+
 int main(int argc, char **argv) {
     bool directed = false;
     bool dash_i = false;
@@ -28,6 +57,7 @@ int main(int argc, char **argv) {
     char *outfile_name;
 
     int opt;
+    opterr = 0;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'h':
@@ -36,7 +66,6 @@ int main(int argc, char **argv) {
             break;
         case 'd': directed = true; break;
         case 'i':
-            printf("%s\n", optarg);
             infile_name = optarg;
             dash_i = true;
             break;
@@ -45,7 +74,7 @@ int main(int argc, char **argv) {
             dash_o = true;
             break;
         default:
-            printf("opt: %d, here\n", opt);
+            fprintf(stderr, "tsp:  unknown or poorly formatted option -%c\n", optopt);
             fprintf(stderr, USAGE);
             return 1;
         }
@@ -55,6 +84,91 @@ int main(int argc, char **argv) {
     (void) dash_o;
     (void) infile_name;
     (void) outfile_name;
+
+    FILE *infile = stdin;
+    if (dash_i) {
+        infile = fopen(infile_name, "r");
+        if (infile == NULL) {
+            fprintf(stderr, "tsp:  error reading input file %s\n", infile_name);
+            fprintf(stderr, USAGE);
+            return 1;
+        }
+    }
+
+    FILE *outfile = stdout;
+    if (dash_o) {
+        outfile = fopen(outfile_name, "w");
+        if (outfile == NULL) {
+            fprintf(stderr, "tsp:  error reading output file %s\n", outfile_name);
+            return 1;
+        }
+    }
+
+    uint32_t num_vertices;
+    if (fscanf(infile, "%" PRId32, &num_vertices) != 1) {
+        fprintf(stderr, "tsp:  error reading number of vertices\n");
+        return 1;
+    }
+
+    Graph *g = graph_create(num_vertices, directed);
+
+    char name[100];
+    for (uint32_t i = 0; i < num_vertices; i++) {
+        fgets(name, 100, infile);
+        if (name[0] == '\n') {
+            fgets(name, 100, infile);
+        }
+
+        unsigned long ln = strlen(name) - 1;
+        if (name[ln] == '\n') {
+            name[ln] = '\0';
+        }
+        graph_add_vertex(g, name, i);
+    }
+
+    uint32_t num_edges;
+    if (fscanf(infile, "%" PRId32, &num_edges) != 1) {
+        fprintf(stderr, "tsp:  error reading number of edges\n");
+        return 1;
+    }
+
+    uint32_t start;
+    uint32_t end;
+    uint32_t weight;
+    for (uint32_t j = 0; j < num_edges; j++) {
+        if (fscanf(infile, "%d %d %d", &start, &end, &weight) != 3) {
+            fprintf(stderr, "tsp:  error reading edge\n");
+            return 1;
+        }
+
+        //	printf("adding weight[%d][%d}: %d\n", start,end,weight);
+        graph_add_edge(g, start, end, weight);
+    }
+
+    Path *current_path = path_create(num_vertices + 1);
+    uint32_t shortest_distance = UINT32_MAX;
+    Path *shortest_path = path_create(num_vertices + 1);
+    path_add(current_path, START_VERTEX, g);
+    graph_visit_vertex(g, START_VERTEX);
+
+    dfs(g, current_path, shortest_path, shortest_distance);
+
+    if (path_distance(shortest_path) == 0) {
+        fprintf(outfile, "No path found! Alissa is lost!\n");
+        return 0;
+    }
+
+    path_add(shortest_path, START_VERTEX, g);
+
+    fprintf(outfile, "Alissa starts at:\n");
+    path_print(shortest_path, outfile, g);
+    fprintf(outfile, "Total Distance: ");
+    fprintf(outfile, "%" PRId32, path_distance(shortest_path));
+    fprintf(outfile, "\n");
+
+    path_free(&shortest_path);
+    path_free(&current_path);
+    graph_free(&g);
 
     return 0;
 }
