@@ -170,5 +170,8 @@ int main(int argc, char **argv) {
     path_free(&current_path);
     graph_free(&g);
 
+    fclose(infile);
+    fclose(outfile);
+
     return 0;
 }

@@ -32,11 +32,11 @@ Graph *graph_create(uint32_t vertices, bool directed) {
 
 void graph_free(Graph **gp) {
     if (gp != NULL && *gp != NULL) {
-        if ((*gp)->visited != NULL) {
+        if ((*gp)->visited) {
             free((*gp)->visited);
             (*gp)->visited = NULL;
         }
-        if ((*gp)->names != NULL) {
+        if ((*gp)->names) {
             for (uint32_t i = 0; i < (*gp)->vertices; i++) {
                 free((*gp)->names[i]);
                 (*gp)->names[i] = NULL;
@@ -44,7 +44,7 @@ void graph_free(Graph **gp) {
             free((*gp)->names);
             (*gp)->names = NULL;
         }
-        if ((*gp)->weights != NULL) {
+        if ((*gp)->weights) {
             for (uint32_t j = 0; j < (*gp)->vertices; j++) {
                 free((*gp)->weights[j]);
                 (*gp)->weights[j] = NULL;
@@ -52,6 +52,7 @@ void graph_free(Graph **gp) {
             free((*gp)->weights);
             (*gp)->weights = NULL;
         }
+        free(*gp);
     }
     if (gp != NULL) {
         *gp = NULL;

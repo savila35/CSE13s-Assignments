@@ -18,8 +18,9 @@ Path *path_create(uint32_t capacity) {
 
 void path_free(Path **pp) {
     if (pp != NULL && *pp != NULL) {
-        if ((*pp)->vertices != NULL) {
+        if ((*pp)->vertices) {
             stack_free(&(*pp)->vertices);
+            (*pp)->vertices = NULL;
         }
         free(*pp);
     }
