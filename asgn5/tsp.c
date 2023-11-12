@@ -22,17 +22,25 @@
     "             graph and the command-line options it accepts, exiting the\n"                    \
     "             program afterwards.\n"
 
-void dfs(Graph *g, Path *curr_path, Path *short_path, uint32_t short_distance) {
-    uint32_t curr_vertex = path_remove(curr_path, g);
-    path_add(curr_path, curr_vertex, g);
+void dfs(Graph *g, Path *curr_path, uint32_t curr_vertex, Path *short_path) {
     graph_visit_vertex(g, curr_vertex);
+    path_add(curr_path, curr_vertex, g);
+
+    //check if visited every vertex
     if (path_vertices(curr_path) == graph_vertices(g)) {
+        //check if edge from ending vertex back to start vertex(0)
         if (graph_get_weight(g, curr_vertex, START_VERTEX) == 0) {
             return;
         }
-        if (path_distance(curr_path) < short_distance) {
+
+        path_add(curr_path, START_VERTEX, g);
+
+        if (path_distance(short_path) == 0) {
             path_copy(short_path, curr_path);
-            short_distance = path_distance(curr_path);
+        }
+
+        if (path_distance(curr_path) <= path_distance(short_path)) {
+            path_copy(short_path, curr_path);
             return;
         }
     }
@@ -40,11 +48,10 @@ void dfs(Graph *g, Path *curr_path, Path *short_path, uint32_t short_distance) {
     for (uint32_t i = 0; i < graph_vertices(g); i++) {
         if (!graph_visited(g, i) && graph_get_weight(g, curr_vertex, i) != 0) {
             //printf("weight[%d][%d}: %d\n", curr_vertex, i, graph_get_weight(g, curr_vertex, i));
-            graph_visit_vertex(g, i);
-            path_add(curr_path, i, g);
-            dfs(g, curr_path, short_path, short_distance);
+            dfs(g, curr_path, i, short_path);
         }
     }
+
     path_remove(curr_path, g);
     graph_unvisit_vertex(g, curr_vertex);
 }
@@ -79,11 +86,6 @@ int main(int argc, char **argv) {
             return 1;
         }
     }
-    (void) directed;
-    (void) dash_i;
-    (void) dash_o;
-    (void) infile_name;
-    (void) outfile_name;
 
     FILE *infile = stdin;
     if (dash_i) {
@@ -146,19 +148,14 @@ int main(int argc, char **argv) {
     }
 
     Path *current_path = path_create(num_vertices + 1);
-    uint32_t shortest_distance = UINT32_MAX;
     Path *shortest_path = path_create(num_vertices + 1);
-    path_add(current_path, START_VERTEX, g);
-    graph_visit_vertex(g, START_VERTEX);
 
-    dfs(g, current_path, shortest_path, shortest_distance);
+    dfs(g, current_path, START_VERTEX, shortest_path);
 
     if (path_distance(shortest_path) == 0) {
         fprintf(outfile, "No path found! Alissa is lost!\n");
         return 0;
     }
-
-    path_add(shortest_path, START_VERTEX, g);
 
     fprintf(outfile, "Alissa starts at:\n");
     path_print(shortest_path, outfile, g);
