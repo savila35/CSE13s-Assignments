@@ -4,7 +4,7 @@ release: CFLAGS=-Wall -Wextra -Wstrict-prototypes -Werror -pedantic
 LDFLAGS=-lm
 
 EXECBIN=tsp
-OBJS=
+OBJS=tsp.o stack.o path.o graph.o
 
 .PHONY: all debug release clean
 
