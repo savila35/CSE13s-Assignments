@@ -86,7 +86,6 @@ void stack_copy(Stack *dst, const Stack *src) {
 
 	dst->top = src->top;
 	memcpy(dst->items, src->items, dst->capacity * sizeof(uint32_t));
-
 }
 
 void stack_print(const Stack *s, FILE *outfile, char *cities[]) {
