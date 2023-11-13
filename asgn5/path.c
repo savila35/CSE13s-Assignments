@@ -41,12 +41,12 @@ uint32_t path_distance(const Path *p) {
 
 void path_add(Path *p, uint32_t val, const Graph *g) {
     if (stack_empty(p->vertices)) {
-        stack_push(p->vertices, val);
+        assert(stack_push(p->vertices, val));
         return;
     }
     uint32_t start;
     stack_peek(p->vertices, &start);
-    stack_push(p->vertices, val);
+    assert(stack_push(p->vertices, val));
     p->total_weight += graph_get_weight(g, start, val);
 }
 
