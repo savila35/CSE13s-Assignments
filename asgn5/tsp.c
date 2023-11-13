@@ -144,12 +144,11 @@ int main(int argc, char **argv) {
     uint32_t end;
     uint32_t weight;
     for (uint32_t j = 0; j < num_edges; j++) {
-        if (fscanf(infile, "%d %d %d", &start, &end, &weight) != 3) {
+        if (fscanf(infile, "%" PRId32 " %" PRId32 " %" PRId32, &start, &end, &weight) != 3) {
             fprintf(stderr, "tsp:  error reading edge\n");
             return 1;
         }
 
-        //	printf("adding weight[%d][%d}: %d\n", start,end,weight);
         graph_add_edge(g, start, end, weight);
     }
 
