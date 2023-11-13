@@ -30,9 +30,10 @@ void dfs(Graph *g, Path *curr_path, uint32_t curr_vertex, Path *short_path) {
     if (path_vertices(curr_path) == graph_vertices(g)) {
         //check if edge from ending vertex back to start vertex(0)
         if (graph_get_weight(g, curr_vertex, START_VERTEX) == 0) {
+            path_remove(curr_path, g);
+            graph_unvisit_vertex(g, curr_vertex);
             return;
         }
-
         path_add(curr_path, START_VERTEX, g);
 
         if (path_distance(short_path) == 0) {
@@ -41,14 +42,18 @@ void dfs(Graph *g, Path *curr_path, uint32_t curr_vertex, Path *short_path) {
 
         if (path_distance(curr_path) <= path_distance(short_path)) {
             path_copy(short_path, curr_path);
-            return;
         }
+        path_remove(curr_path, g);
+        graph_unvisit_vertex(g, curr_vertex);
+
+        return;
     }
 
     for (uint32_t i = 0; i < graph_vertices(g); i++) {
-        if (!graph_visited(g, i) && graph_get_weight(g, curr_vertex, i) != 0) {
-            //printf("weight[%d][%d}: %d\n", curr_vertex, i, graph_get_weight(g, curr_vertex, i));
-            dfs(g, curr_path, i, short_path);
+        if (graph_get_weight(g, curr_vertex, i) != 0) {
+            if (!graph_visited(g, i)) {
+                dfs(g, curr_path, i, short_path);
+            }
         }
     }
 
