@@ -104,18 +104,18 @@ void graph_print(const Graph *g) {
     printf("Num of Vertices: %" PRId32 "\n", g->vertices);
     printf("Directed?: %s\n", g->directed ? "true" : "false");
     for (uint32_t i = 0; i < g->vertices; i++) {
-        printf("%" PRId32 ": %s\n", i, g->names[i]);
-        printf(" Visited?: %s\n", g->visited[i] ? "true" : "false");
+        printf("%" PRId32 ": %s", i, g->names[i]);
+        printf(" | Visited?: %s\n", g->visited[i] ? "true" : "false");
     }
     printf(" ");
     for (uint32_t l = 0; l < g->vertices; l++) {
-        printf("  %" PRId32, l);
+        printf("  %4" PRId32, l);
     }
     printf("\n");
     for (uint32_t j = 0; j < g->vertices; j++) {
         printf("%" PRId32, j);
         for (uint32_t k = 0; k < g->vertices; k++) {
-            printf("  %" PRId32, k);
+            printf("  %4" PRId32, g->weights[j][k]);
         }
         printf("\n");
     }
