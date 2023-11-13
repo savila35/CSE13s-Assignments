@@ -44,6 +44,7 @@ void dfs(Graph *g, Path *curr_path, uint32_t curr_vertex, Path *short_path) {
             path_copy(short_path, curr_path);
         }
         path_remove(curr_path, g);
+        path_remove(curr_path, g);
         graph_unvisit_vertex(g, curr_vertex);
 
         return;
