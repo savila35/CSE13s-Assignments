@@ -6,7 +6,7 @@ LDFLAGS=-lm
 EXECBIN=tsp
 OBJS=tsp.o stack.o path.o graph.o
 
-.PHONY: all debug release clean
+.PHONY: all debug release clean scan-build
 
 all: debug
 
@@ -26,3 +26,5 @@ clean:
 format:
 	clang-format -i --style=file *.[ch]
 
+scan-build: clean
+	scan-build --use-cc=clang make
