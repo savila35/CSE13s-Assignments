@@ -52,7 +52,7 @@ void path_add(Path *p, uint32_t val, const Graph *g) {
 
 uint32_t path_remove(Path *p, const Graph *g) {
     uint32_t end;
-    stack_pop(p->vertices, &end);
+    assert(stack_pop(p->vertices, &end));
     if (stack_size(p->vertices) <= 1) {
         p->total_weight = 0;
         return end;
@@ -75,7 +75,7 @@ void path_print(const Path *p, FILE *f, const Graph *g) {
     uint32_t *reverse = calloc(l, sizeof(uint32_t));
     int i = l - 1;
     while (stack_size(p->vertices) > 0) {
-        stack_pop(p->vertices, &v);
+        assert(stack_pop(p->vertices, &v));
         reverse[i] = v;
         i--;
     }
