@@ -1,34 +1,32 @@
 CC=clang
 BASICS= -Wall -Wextra -Wstrict-prototypes -Werror -pedantic
-debug:   CFLAGS= $(BASICS) -gdwarf-4
+debug:   CFLAGS = $(BASICS) -gdwarf-4
 release: CFLAGS= $(BASICS)
-colorb: CFLAGS= $(BASICS)
-iotest: CFLAGS=-Wall -Wextra -Wstrict-prototypes -Werror -pedantic
+iotest: CFLAGS = $(BASICS) -gdwarf-4
 LDFLAGS=-lm
-
 IOTEST=iotest
-EXECBIN=colorb 
+EXEC=colorb
 OBJS=io.o bmp.o
 
 .PHONY: all debug release clean scan-build iotest
 
-all: release iotest
+all: debug iotest
 
-debug: $(EXECBIN)
+debug: $(EXEC)
 
-release: $(EXECBIN)
+release: $(EXEC)
 
-$(EXECBIN): $(OBJS) colorb.o 
+$(EXEC): $(OBJS) $(EXEC).o
 	$(CC) $^ $(LDFLAGS) -o $@ 
 
-$(IOTEST): $(OBJS) iotest.o
+$(IOTEST): $(OBJS) $(IOTEST).o
 	$(CC) $^ $(LDFLAGS) -o $@ 
 
 %.o : %.c
 	$(CC) $(CFLAGS) -c $<
 
 clean:
-	rm -f $(EXECBIN) $(OBJS)
+	rm -f $(EXEC) $(OBJS) $(EXEC).o $(IOTEST).o $(IOTEST)
 
 format:
 	clang-format -i --style=file *.[ch]
