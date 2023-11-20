@@ -168,6 +168,10 @@ int main(int argc, char **argv) {
     * *make sure* that no data has been written before you close the file!
     */
 
+    ftruncate(fd, 0);
+
+    printf("testing write_uint8\n");
+
     unlink(filename);
     close(fd);
 
