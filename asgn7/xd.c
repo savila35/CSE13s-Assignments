@@ -5,11 +5,10 @@
 #include <unistd.h>
 
 void print_binary(int num) {
-    char bin[8];
     for (int i = 7; i >= 0; i--) {
-        bin[7 - i] = ((num >> i) & 1) + '0';
+        printf("%d", (num & (1 << i)));
     }
-    printf("%s: ", bin);
+    printf(": ");
 }
 
 void print_hex(char *buffer, int len) {
@@ -27,7 +26,6 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    int fdout = 1;
     int fdin = 0;
 
     if (argc == 2) {
@@ -37,9 +35,8 @@ int main(int argc, char **argv) {
         }
     }
 
-    char buffer[16] = "\0";
+    char buffer[17] = "";
     int res = read(fdin, &buffer, 16);
-    (void) fdout;
     int index = 0;
     while (1) {
         if (res == 0) {
@@ -54,7 +51,7 @@ int main(int argc, char **argv) {
                 }
             }
             printf("%s\n", buffer);
-            memset(buffer, '\0', 16 * sizeof(char));
+            memset(buffer, '\0', 16);
             res = 0;
             index++;
         }
