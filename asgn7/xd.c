@@ -19,6 +19,7 @@ void print_hex(char *buffer, int len) {
             printf(" ");
         }
     }
+    printf(" ");
 }
 
 int main(int argc, char **argv) {
