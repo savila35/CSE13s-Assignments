@@ -15,7 +15,7 @@ void print_binary(int num) {
 void print_hex(char *buffer, int len) {
     for (int i = 1; i <= len; i++) {
         printf("%02x", (unsigned char) buffer[i - 1]);
-        if (i != 0 && i % 2 == 0) {
+        if (i % 2 == 0) {
             printf(" ");
         }
     }
@@ -71,8 +71,11 @@ int main(int argc, char **argv) {
 
     print_binary(index);
     print_hex(buffer, res);
-    for (int k = 16 - res + 3; k >= 0; k--) {
+    for (int k = 1; k <= 16 - res; k++) {
         printf("  ");
+        if (k % 2) {
+            printf(" ");
+        }
     }
     for (int j = 0; j < res; j++) {
         if (32 > buffer[j] || buffer[j] > 126) {
