@@ -9,12 +9,12 @@ void print_binary(int num) {
     for (int i = 7; i >= 0; i--) {
         bin[7 - i] = ((num >> i) & 1) + '0';
     }
-    printf("%s:  ", bin);
+    printf("%s: ", bin);
 }
 
 void print_hex(char *buffer, int len) {
     for (int i = 1; i <= len; i++) {
-        printf("%02x", buffer[i - 1]);
+        printf("%02x", (unsigned char) buffer[i - 1]);
         if (i != 0 && i % 2 == 0) {
             printf(" ");
         }
