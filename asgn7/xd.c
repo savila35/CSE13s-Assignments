@@ -4,9 +4,9 @@
 #include <string.h>
 #include <unistd.h>
 
-void print_binary(int num) {
+void print_binary(unsigned int num) {
     for (int i = 7; i >= 0; i--) {
-        printf("%d", (num & (1 << i)));
+        printf("%d", (num & (1 << i)) ? 1 : 0);
     }
     printf(": ");
 }
