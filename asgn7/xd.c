@@ -4,9 +4,9 @@
 #include <string.h>
 #include <unistd.h>
 
-void print_hex(char *buffer) {
+void print_hex(char *buffer, int len) {
     for (int i = 1; i <= 16; i++) {
-        if (buffer[i-1] == '\0') {
+        if (i > len) {
             printf("  ");
         } else {
             printf("%02x", (unsigned char) buffer[i - 1]);
@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
         }
         if (res == 16) {
             printf("%08x: ", index);
-            print_hex(buffer);
+            print_hex(buffer, 16);
             for (int i = 0; i < 16; i++) {
                 if (32 > buffer[i] || buffer[i] > 126) {
                     buffer[i] = '.';
@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
     }
 
     printf("%08x: ", index);
-    print_hex(buffer);
+    print_hex(buffer, res);
     for (int j = 0; j < res; j++) {
         if (32 > buffer[j] || buffer[j] > 126) {
             buffer[j] = '.';
