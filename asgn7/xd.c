@@ -61,9 +61,9 @@ int main(int argc, char **argv) {
         if (temp == 0) {
             break;
         }
-	if (temp == -1) {
-		return 1;
-	}
+        if (temp == -1) {
+            return 1;
+        }
         res += temp;
     }
 
