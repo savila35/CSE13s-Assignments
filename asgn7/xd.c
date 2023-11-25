@@ -11,9 +11,13 @@ void print_binary(unsigned int num) {
     printf(": ");
 }
 
-void print_hex(char *buffer, int len) {
-    for (int i = 1; i <= len; i++) {
-        printf("%02x", (unsigned char) buffer[i - 1]);
+void print_hex(char *buffer) {
+    for (int i = 1; i <= 16; i++) {
+        if (buffer[i] == '\0') {
+            printf("  ");
+        } else {
+            printf("%02x", (unsigned char) buffer[i - 1]);
+        }
         if (i % 2 == 0) {
             printf(" ");
         }
@@ -43,8 +47,8 @@ int main(int argc, char **argv) {
             return 0;
         }
         if (res == 16) {
-            print_binary(index);
-            print_hex(buffer, 16);
+            printf("%08x: ", index);
+            print_hex(buffer);
             for (int i = 0; i < 16; i++) {
                 if (32 > buffer[i] || buffer[i] > 126) {
                     buffer[i] = '.';
@@ -53,7 +57,7 @@ int main(int argc, char **argv) {
             printf("%s\n", buffer);
             memset(buffer, '\0', 16);
             res = 0;
-            index++;
+            index += 16;
         }
 
         if (res == -1) {
@@ -67,14 +71,8 @@ int main(int argc, char **argv) {
         res += temp;
     }
 
-    print_binary(index);
-    print_hex(buffer, res);
-    for (int k = 1; k <= 16 - res; k++) {
-        printf("  ");
-        if (k % 2) {
-            printf(" ");
-        }
-    }
+    printf("%08x: ", index);
+    print_hex(buffer);
     for (int j = 0; j < res; j++) {
         if (32 > buffer[j] || buffer[j] > 126) {
             buffer[j] = '.';
