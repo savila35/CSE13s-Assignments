@@ -4,16 +4,9 @@
 #include <string.h>
 #include <unistd.h>
 
-void print_binary(unsigned int num) {
-    for (int i = 7; i >= 0; i--) {
-        printf("%d", (num & (1 << i)) ? 1 : 0);
-    }
-    printf(": ");
-}
-
 void print_hex(char *buffer) {
     for (int i = 1; i <= 16; i++) {
-        if (buffer[i] == '\0') {
+        if (buffer[i-1] == '\0') {
             printf("  ");
         } else {
             printf("%02x", (unsigned char) buffer[i - 1]);
