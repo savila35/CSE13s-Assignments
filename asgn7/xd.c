@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
                 }
             }
             printf("%s\n", buffer);
-            memset(buffer, '\0', 16);
+            memset(buffer, '\0', 16 * sizeof(char));
             res = 0;
             index += 16;
         }
@@ -64,13 +64,15 @@ int main(int argc, char **argv) {
         res += temp;
     }
 
-    printf("%08x: ", index);
-    print_hex(buffer, res);
-    for (int j = 0; j < res; j++) {
-        if (32 > buffer[j] || buffer[j] > 126) {
-            buffer[j] = '.';
+    if (res > 0) {
+        printf("%08x: ", index);
+        print_hex(buffer, res);
+        for (int j = 0; j < res; j++) {
+            if (32 > buffer[j] || buffer[j] > 126) {
+                buffer[j] = '.';
+            }
         }
+        printf("%s\n", buffer);
     }
-    printf("%s\n", buffer);
     return 0;
 }
