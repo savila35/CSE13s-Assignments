@@ -5,7 +5,7 @@
 #define r(o) return o
 void p(char *b, long l) {
     for (long i = 1; i <= 16; i++) {
-        printf(i > l ? "  " : "%02x",(unsigned char) b[i - 1]), printf(i % 2 == 0 ? " " : "");
+        printf(i > l ? "  " : "%02x", (unsigned char) b[i - 1]), printf(i % 2 == 0 ? " " : "");
     }
     printf(" ");
     for (long j = 0; j < l; j++) {
