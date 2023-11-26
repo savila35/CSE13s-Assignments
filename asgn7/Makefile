@@ -11,7 +11,7 @@ all: debug
 
 debug: $(EXEC) $(EXEC2)
 
-release: $(EXEC)
+release: $(EXEC) $(EXEC2)
 
 $(EXEC): $(EXEC).o
 	$(CC) $^ -o $@
