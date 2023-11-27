@@ -30,8 +30,7 @@ int main(int c, char **v) {
         }
         if (r < 0)
             r(1);
-        if (r == 16) {
+        if (r == 16)
             printf("%08x: ", x), p(b, r), r = 0, x += 16;
-        }
     }
 }
