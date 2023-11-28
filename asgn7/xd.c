@@ -4,7 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 
-void print_hex(char *buffer, int len) {
+void print_hex(char *buffer, long len) {
     for (int i = 1; i <= 16; i++) {
         if (i > len) {
             printf("  ");
@@ -33,10 +33,11 @@ int main(int argc, char **argv) {
     }
 
     char buffer[17] = "";
-    int res = read(fdin, &buffer, 16);
+    long res = read(fdin, &buffer, 16);
     int index = 0;
     while (1) {
         if (res == 0) {
+            close(fdin);
             return 0;
         }
         if (res == 16) {
@@ -54,14 +55,16 @@ int main(int argc, char **argv) {
         }
 
         if (res == -1) {
+            close(fdin);
             return 1;
         }
 
-        int temp = read(fdin, buffer + res, 16 - res);
+        long temp = read(fdin, buffer + res, 16 - (unsigned long) res);
         if (temp == 0) {
             break;
         }
         if (temp == -1) {
+            close(fdin);
             return 1;
         }
         res += temp;
@@ -77,5 +80,6 @@ int main(int argc, char **argv) {
         }
         printf("%s\n", buffer);
     }
+    close(fdin);
     return 0;
 }
