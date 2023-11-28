@@ -55,7 +55,6 @@ int main(int argc, char **argv) {
         }
 
         if (res == -1) {
-            close(fdin);
             return 1;
         }
 
@@ -64,7 +63,6 @@ int main(int argc, char **argv) {
             break;
         }
         if (temp == -1) {
-            close(fdin);
             return 1;
         }
         res += temp;
