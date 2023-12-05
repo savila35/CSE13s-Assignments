@@ -13,30 +13,23 @@ struct PriorityQueue {
 };
 
 PriorityQueue *pq_create(void) {
-    Node *tree = node_create(0, 0);
-    ListElement *list = (ListElement *) malloc(sizeof(ListElement));
-    list->tree = tree;
     PriorityQueue *pq = (PriorityQueue *) malloc(sizeof(PriorityQueue));
     if (pq == NULL) {
         return NULL;
     }
-    pq->list = list;
-    pq->list->tree = NULL;
-    pq->list->next = NULL;
+    pq->list = NULL;
     return pq;
 }
 
 void pq_free(PriorityQueue **q) {
     if (*q != NULL) {
         ListElement *current = (*q)->list;
+	ListElement *temp;
         while (current != NULL) {
-            ListElement *temp = current;
+            temp = current;
             current = current->next;
-            if (temp->tree != NULL) {
-                node_free(&temp->tree);
-            }
+            node_free(&temp->tree);
             free(temp);
-            temp = NULL;
         }
         free(*q);
         *q = NULL;
@@ -44,7 +37,7 @@ void pq_free(PriorityQueue **q) {
 }
 
 bool pq_is_empty(PriorityQueue *q) {
-    if (q->list == NULL) {
+    if (q->list == NULL || q == NULL) {
         return true;
     } else {
         return false;
@@ -55,11 +48,13 @@ bool pq_size_is_1(PriorityQueue *q) {
     if (pq_is_empty(q)) {
         return false;
     }
-    if (q->list->next == NULL) {
-        return true;
-    } else {
-        return false;
+    int count = 0;
+    ListElement *current = q->list;
+    while (current != NULL) {
+	    count++;
+	    current = current->next;
     }
+    return (count == 1);
 }
 
 bool pq_less_than(ListElement *e1, ListElement *e2) {
@@ -76,24 +71,25 @@ bool pq_less_than(ListElement *e1, ListElement *e2) {
 void enqueue(PriorityQueue *q, Node *tree) {
     ListElement *new_element = (ListElement *) malloc(sizeof(ListElement));
     new_element->tree = tree;
+    new_element->next = NULL;
 
     if (pq_is_empty(q)) {
         q->list = new_element;
-        return;
+	return;
     } else if (pq_less_than(new_element, q->list)) {
         new_element->next = q->list;
         q->list = new_element;
-        return;
+	return;
     } else {
         ListElement *current = q->list;
         while (true) {
             if (current->next == NULL) {
                 current->next = new_element;
-                return;
+		return;
             } else if (pq_less_than(new_element, current->next)) {
                 new_element->next = current->next;
                 current->next = new_element;
-                return;
+		    return;
             }
             current = current->next;
         }
