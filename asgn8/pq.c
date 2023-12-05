@@ -24,7 +24,7 @@ PriorityQueue *pq_create(void) {
 void pq_free(PriorityQueue **q) {
     if (*q != NULL) {
         ListElement *current = (*q)->list;
-	ListElement *temp;
+        ListElement *temp;
         while (current != NULL) {
             temp = current;
             current = current->next;
@@ -51,8 +51,8 @@ bool pq_size_is_1(PriorityQueue *q) {
     int count = 0;
     ListElement *current = q->list;
     while (current != NULL) {
-	    count++;
-	    current = current->next;
+        count++;
+        current = current->next;
     }
     return (count == 1);
 }
@@ -70,26 +70,29 @@ bool pq_less_than(ListElement *e1, ListElement *e2) {
 
 void enqueue(PriorityQueue *q, Node *tree) {
     ListElement *new_element = (ListElement *) malloc(sizeof(ListElement));
+    if (new_element == NULL) {
+        exit(1);
+    }
     new_element->tree = tree;
     new_element->next = NULL;
 
     if (pq_is_empty(q)) {
         q->list = new_element;
-	return;
+        return;
     } else if (pq_less_than(new_element, q->list)) {
         new_element->next = q->list;
         q->list = new_element;
-	return;
+        return;
     } else {
         ListElement *current = q->list;
         while (true) {
             if (current->next == NULL) {
                 current->next = new_element;
-		return;
+                return;
             } else if (pq_less_than(new_element, current->next)) {
                 new_element->next = current->next;
                 current->next = new_element;
-		    return;
+                return;
             }
             current = current->next;
         }
@@ -101,8 +104,10 @@ Node *dequeue(PriorityQueue *q) {
         fprintf(stderr, "error: pq is empty cannot dequeue\n");
         exit(1);
     }
-    Node *node = q->list->tree;
+    ListElement *temp = q->list;
+    Node *node = temp->tree;
     q->list = q->list->next;
+    free(temp);
     return node;
 }
 
