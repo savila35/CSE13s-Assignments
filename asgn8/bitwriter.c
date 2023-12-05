@@ -16,6 +16,8 @@ BitWriter *bit_write_open(const char *filename) {
     }
     FILE *f = fopen(filename, "wb");
     if (f == NULL) {
+        free(bw);
+        bw = NULL;
         return NULL;
     }
     bw->underlying_stream = f;

@@ -16,6 +16,8 @@ BitReader *bit_read_open(const char *filename) {
     }
     br->underlying_stream = fopen(filename, "rb");
     if (br->underlying_stream == NULL) {
+        free(br);
+        br = NULL;
         return NULL;
     }
     br->byte = 0;
