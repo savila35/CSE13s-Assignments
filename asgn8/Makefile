@@ -41,7 +41,7 @@ $(TEST4): $(TEST4).o $(OBJS)
 	$(CC) $(CFLAGS) -c $<
 
 clean:
-	rm -f $(EXEC) $(EXEC).o $(EXEC2) $(EXEC2).o $(TESTS) $(TESTS).o
+	rm -f $(EXEC) $(EXEC).o $(EXEC2) $(EXEC2).o $(TESTS) *.o
 
 format:
 	clang-format -i --style=file *.[ch]
