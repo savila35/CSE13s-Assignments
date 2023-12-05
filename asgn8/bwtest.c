@@ -153,6 +153,7 @@ int main(void) {
             exit(1);
         }
     }
+    fclose(f);
 
     printf("bwtest, as it is, reports no errors\n");
     return 0;

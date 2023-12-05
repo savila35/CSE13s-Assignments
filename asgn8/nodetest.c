@@ -63,11 +63,11 @@ int main(int argc, char **argv) {
     *     /  \
     *   n1    n3
     */
-    N(n1, '1',  1);
-    N(n2, '2',  4);
-    N(n3, '3',  3);
+    N(n1, '1', 1);
+    N(n2, '2', 4);
+    N(n3, '3', 3);
     N(n4, '4', 10);
-    N(n5, '5',  6);
+    N(n5, '5', 6);
 
     n2->left = n1;
     n2->right = n3;
@@ -80,20 +80,8 @@ int main(int argc, char **argv) {
     /*
     * Free everything.
     */
-    node_free(&n1);
-    assert(n1 == NULL);
-
-    node_free(&n2);
-    assert(n2 == NULL);
-
-    node_free(&n3);
-    assert(n3 == NULL);
-
     node_free(&n4);
     assert(n4 == NULL);
-
-    node_free(&n5);
-    assert(n5 == NULL);
 
     printf("nodetest, as it is, reports no errors\n");
     return 0;
