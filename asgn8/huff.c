@@ -51,7 +51,7 @@ Node *create_tree(uint32_t *histogram, uint16_t *num_leaves) {
 }
 
 void fill_code_table(Code *code_table, Node *node, uint64_t code, uint8_t code_length) {
-    if (node->symbol == '0') {
+    if (node->left != NULL) {
         fill_code_table(code_table, node->left, code, code_length + 1);
         code |= (uint64_t) 1 << code_length;
         fill_code_table(code_table, node->right, code, code_length + 1);
@@ -78,6 +78,7 @@ void huff_compress_file(BitWriter *outbuf, FILE *fin, uint32_t filesize, uint16_
     bit_write_uint8(outbuf, 'C');
     bit_write_uint32(outbuf, filesize);
     bit_write_uint16(outbuf, num_leaves);
+    huff_write_tree(outbuf, code_tree);
     while (1) {
         int b = fgetc(fin);
         if (b == EOF) {
@@ -90,7 +91,6 @@ void huff_compress_file(BitWriter *outbuf, FILE *fin, uint32_t filesize, uint16_
             code >>= 1;
         }
     }
-    huff_write_tree(outbuf, code_tree);
 }
 
 int main(int argc, char **argv) {
