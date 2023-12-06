@@ -47,7 +47,9 @@ Node *create_tree(uint32_t *histogram, uint16_t *num_leaves) {
         node->right = right;
         enqueue(q, node);
     }
-    return dequeue(q);
+    Node *last = dequeue(q);
+    pq_free(&q);
+    return last;
 }
 
 void fill_code_table(Code *code_table, Node *node, uint64_t code, uint8_t code_length) {
