@@ -14,10 +14,10 @@ void dehuff_decompress_file(FILE *fout, BitReader *inbuf) {
     int stack_top = -1;
     uint8_t type1 = bit_read_uint8(inbuf);
     uint8_t type2 = bit_read_uint8(inbuf);
-    assert(type1 == 'H');
-    assert(type2 == 'C');
     uint32_t filesize = bit_read_uint32(inbuf);
     uint16_t num_leaves = bit_read_uint16(inbuf);
+    assert(type1 == 'H');
+    assert(type2 == 'C');
     int num_nodes = 2 * num_leaves - 1;
     Node *node;
     for (int i = 0; i < num_nodes; i++) {
@@ -30,7 +30,6 @@ void dehuff_decompress_file(FILE *fout, BitReader *inbuf) {
             node->right = stack[stack_top--];
             node->left = stack[stack_top--];
         }
-        printf("stack top: %d\n", stack_top);
         stack[++stack_top] = node;
     }
     Node *code_tree = stack[stack_top--];
@@ -46,9 +45,10 @@ void dehuff_decompress_file(FILE *fout, BitReader *inbuf) {
             if (node->left == NULL && node->right == NULL) {
                 break;
             }
-            fputc(node->symbol, fout);
         }
+        fputc(node->symbol, fout);
     }
+    node_free(&code_tree);
 }
 
 int main(int argc, char **argv) {
@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
             }
             break;
         case 'o':
-            fout = fopen(optarg, "wb");
+            fout = fopen(optarg, "w");
             if (fout == NULL) {
                 fprintf(stderr, "dehuff:  error opening output file %s\n", optarg);
                 fprintf(stderr, USAGE);
