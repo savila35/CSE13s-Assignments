@@ -10,7 +10,7 @@
 #define USAGE   "Usage: dehuff -i infile -o outfile\n       dehuff -h\n"
 
 void dehuff_decompress_file(FILE *fout, BitReader *inbuf) {
-    Node *stack[64];
+    Node *stack[64] = { NULL };
     int stack_top = -1;
     uint8_t type1 = bit_read_uint8(inbuf);
     uint8_t type2 = bit_read_uint8(inbuf);
@@ -38,12 +38,18 @@ void dehuff_decompress_file(FILE *fout, BitReader *inbuf) {
         while (1) {
             uint8_t bit = bit_read_bit(inbuf);
             if (bit == 0) {
-                node = node->left;
+                if (node != NULL) {
+                    node = node->left;
+                }
             } else {
-                node = node->right;
+                if (node != NULL) {
+                    node = node->right;
+                }
             }
-            if (node->left == NULL && node->right == NULL) {
-                break;
+            if (node != NULL) {
+                if (node->left == NULL && node->right == NULL) {
+                    break;
+                }
             }
         }
         fputc(node->symbol, fout);
