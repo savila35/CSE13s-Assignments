@@ -1,5 +1,6 @@
 CC = clang
 BASICS = -Wall -Wextra -Wconversion -Wdouble-promotion -Wstrict-prototypes -Werror -pedantic
+CFLAGS = $(BASICS)
 debug: CFLAGS = $(BASICS) -gdwarf-4
 release: CFLAGS = $(BASICS)
 EXEC = huff
